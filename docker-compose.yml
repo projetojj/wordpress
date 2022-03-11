@@ -1,0 +1,38 @@
+version: "3.9"
+    
+services:
+  mysql-wordpress:
+    container_name: mysql-wordpress
+    image: mysql:5.7
+    ports:
+    - "3307:3307"
+    volumes:
+      - db_data:/var/lib/mysql-wordpress
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    
+  wordpress:
+    depends_on:
+      - mysql-wordpress
+    image: wordpress:latest
+    volumes:
+      - wordpress_data:/var/www/html
+    ports:
+      - "8000:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: mysql-wordpress
+      WORDPRESS_DB_PORT: '3307'
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+volumes:
+  db_data: {}
+  wordpress_data: {}
+
+
+
